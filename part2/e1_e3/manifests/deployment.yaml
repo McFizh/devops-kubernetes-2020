@@ -1,6 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: mainapp-ns
   name: p2e01-pong-dep
 spec:
   replicas: 1
@@ -19,6 +20,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: mainapp-ns
   name: p2e01-main-dep
 spec:
   replicas: 1
