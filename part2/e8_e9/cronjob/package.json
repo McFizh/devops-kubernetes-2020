@@ -1,5 +1,5 @@
 {
-  "name": "p2e07",
+  "name": "p2e9",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,8 +8,6 @@
   },
   "author": "",
   "dependencies": {
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
     "got": "^11.8.0",
     "pg": "^8.5.0",
     "uuid": "^8.3.1"

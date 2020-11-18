@@ -5,6 +5,8 @@ const { promisify } = require('util');
 const Uuid = require('uuid');
 const stream = require('stream');
 
+const { initDb, getClient } = require('./database');
+
 const pipeline = promisify(stream.pipeline);
 const app = express();
 
@@ -12,7 +14,9 @@ require('dotenv').config();
 app.use(express.json());
 
 const port = process.env.PORT || 3000;
-let todoList = [];
+
+// Connect to database
+initDb();
 
 // Fetch random image
 const fetchImage = async () => {
@@ -26,31 +30,63 @@ const fetchImage = async () => {
 }
 
 //
-app.get('/todos', (req, res) => {
-  res.send(todoList);
+app.get('/todos', async (req, res) => {
+  console.log('GET: /todos');
+
+  const client = getClient();
+  if(!client) {
+    res.status(500).send('Client not connected');
+  }
+
+  try {
+    const rsp = await client.query(`select * from "todos"`)
+    return res.send(rsp.rows);
+  } catch(err) {
+    console.log(err);
+    return res.status(500).send({ error: 'Query failed' });
+  }  
 });
 
-app.post('/todos', (req, res) => {
+app.post('/todos', async (req, res) => {
+  console.log('POST: /todos');
+
   const { todo } = req.body;
   if(!todo) {
-    return res.statusCode(400).send({ error: 'todo missing' });
+    return res.status(400).send({ error: 'todo missing' });
   }
 
   if(todo.length > 140) {
-    return res.statusCode(400).send({ error: 'todo longer than 140 characters' });
+    return res.status(400).send({ error: 'todo longer than 140 characters' });
+  }
+
+  const client = getClient();
+  if(!client) {
+    res.status(500).send('Client not connected');
   }
 
   const todoObj = {
     id: Uuid.v4(),
-    text: todo
+    content: todo,
+    done: false
   };
 
-  todoList.push(todoObj);
+  console.log('Saving new todo', todoObj);
+
+  try {
+    const rsp = await client.query(`insert into todos (id, content, done) values ($1, $2, false)`, 
+      [todoObj.id, todoObj.content]);
+  } catch(err) {
+    console.log(err);
+    return res.status(500).send({ error: 'Query failed' });
+  }  
+
   res.send(todoObj);
 });
 
 //
 app.get('/dailypicture', (req, res) => {
+  console.log('GET: /dailypicture');
+
   if(!fs.existsSync('/shared/dailypic.jpg')) {
     return res.status(404).end('Daily picture not found');
   }
