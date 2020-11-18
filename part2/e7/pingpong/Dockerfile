@@ -1,4 +1,4 @@
 FROM node:lts-alpine
-COPY index.js package* ./
+COPY *.js package* ./
 RUN npm ci
 ENTRYPOINT ["node","index.js"]
