@@ -52,10 +52,12 @@ app.post('/todos', async (req, res) => {
 
   const { todo } = req.body;
   if(!todo) {
+    console.log('Err: todo text missing');
     return res.status(400).send({ error: 'todo missing' });
   }
 
   if(todo.length > 140) {
+    console.log(`Err: Too long todo (${todo.length} chars)`);
     return res.status(400).send({ error: 'todo longer than 140 characters' });
   }
 
