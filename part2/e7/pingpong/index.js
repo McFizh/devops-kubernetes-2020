@@ -14,7 +14,7 @@ initDb();
 const port = process.env.PORT || 3000;
 let count = 0;
 
-app.get('/', async (req, res) => {
+const serveFrontpage = async (req, res) => {
   const client = getClient();
   if(client) {
     try {
@@ -26,7 +26,11 @@ app.get('/', async (req, res) => {
 
   res.send(`pong ${count}\n`);
   count++;
-});
+};
+
+//
+app.get('/', serveFrontpage);
+app.get('/pingpong', serveFrontpage);
 
 app.get('/count', (req, res) => {
   res.send({ count });
