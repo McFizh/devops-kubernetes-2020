@@ -42,7 +42,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   namespace: mainapp-ns
-  name: p3e01-ingress
+  name: p3e02-ingress
 spec:
   rules:
   - http:
