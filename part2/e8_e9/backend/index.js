@@ -100,6 +100,11 @@ app.get('/api/dailypicture', (req, res) => {
   });
 });
 
+app.use((req,res,next) => {
+  console.log(`404 request: ${req.originalUrl}`);
+  res.status(404).send('Unable to find the requested resource!');
+});
+
 //
 fetchImage();
 app.listen(port, () => {
