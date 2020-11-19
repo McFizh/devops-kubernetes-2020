@@ -16,7 +16,7 @@ metadata:
   namespace: mainapp-ns
   name: pongapp-service
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: p3e01-pong
   ports:
@@ -30,7 +30,7 @@ metadata:
   namespace: mainapp-ns
   name: mainapp-service
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: p3e01-main
   ports:

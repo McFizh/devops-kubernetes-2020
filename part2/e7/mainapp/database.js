@@ -44,7 +44,7 @@ const setupDb = async () => {
     await client.connect();
     return 1;
   } catch(err) {
-    if(err.code === 'ECONNREFUSED' || err.code === 'EAI_AGAIN') {
+    if(err.code === 'ECONNREFUSED' || err.code === 'EAI_AGAIN' || err.code === 'ENOTFOUND') {
       client.end();
       delete client;
       return 0;

@@ -47,7 +47,7 @@ const setupDb = async () => {
     await client.query('insert into appvalues (name, value) values (\'count\',0);');
     return 1;
   } catch(err) {
-    if(err.code === 'ECONNREFUSED' || err.code === 'EAI_AGAIN') {
+    if(err.code === 'ECONNREFUSED' || err.code === 'EAI_AGAIN' || err.code === 'ENOTFOUND') {
       client.end();
       delete client;
       return 0;

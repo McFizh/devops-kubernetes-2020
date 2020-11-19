@@ -36,6 +36,11 @@ app.get('/count', (req, res) => {
   res.send({ count });
 });
 
+app.use((req,res,next) => {
+  console.log(`404 request: ${req.originalUrl}`);
+  res.status(404).send('Unable to find the requested resource!');
+});
+
 app.listen(port, () => {
   console.log(`Pong app listening on ${port}`);
 });
