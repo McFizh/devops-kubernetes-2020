@@ -45,7 +45,7 @@ const setupDb = async () => {
     await client.query('create table IF NOT EXISTS todos (id uuid, content text, done boolean);');
     return 1;
   } catch(err) {
-    if(err.code === 'ECONNREFUSED' || err.code === 'EAI_AGAIN') {
+    if(err.code === 'ECONNREFUSED' || err.code === 'EAI_AGAIN' || err.code === 'ENOTFOUND') {
       client.end();
       delete client;
       return 0;

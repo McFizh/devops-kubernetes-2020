@@ -30,8 +30,8 @@ const fetchImage = async () => {
 }
 
 //
-app.get('/todos', async (req, res) => {
-  console.log('GET: /todos');
+app.get('/api/todos', async (req, res) => {
+  console.log('GET: /api/todos');
 
   const client = getClient();
   if(!client) {
@@ -47,8 +47,8 @@ app.get('/todos', async (req, res) => {
   }  
 });
 
-app.post('/todos', async (req, res) => {
-  console.log('POST: /todos');
+app.post('/api/todos', async (req, res) => {
+  console.log('POST: /api/todos');
 
   const { todo } = req.body;
   if(!todo) {
@@ -86,8 +86,8 @@ app.post('/todos', async (req, res) => {
 });
 
 //
-app.get('/dailypicture', (req, res) => {
-  console.log('GET: /dailypicture');
+app.get('/api/dailypicture', (req, res) => {
+  console.log('GET: /api/dailypicture');
 
   if(!fs.existsSync('/shared/dailypic.jpg')) {
     return res.status(404).end('Daily picture not found');
