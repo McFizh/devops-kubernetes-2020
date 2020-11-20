@@ -13,20 +13,20 @@ env:
 jobs:
   setup-build-publish-deploy:
     name: Setup, Build, Publish, and Deploy
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
 
     steps:
     - name: Checkout
       uses: actions/checkout@v2
 
     - name: Create backend image name
-      run: echo "::set-env name=B_IMAGE_WITH_TAG::gcr.io/${{ secrets.GKE_PROJECT }}/$B_IMAGE:${GITHUB_REF#refs/heads/}-$GITHUB_SHA"
+      run: echo "B_IMAGE_WITH_TAG=gcr.io/${{ secrets.GKE_PROJECT }}/$B_IMAGE:${GITHUB_REF#refs/heads/}-$GITHUB_SHA" >> $GITHUB_ENV
 
     - name: Create frontend image name
-      run: echo "::set-env name=F_IMAGE_WITH_TAG::gcr.io/${{ secrets.GKE_PROJECT }}/$F_IMAGE:${GITHUB_REF#refs/heads/}-$GITHUB_SHA"
+      run: echo "F_IMAGE_WITH_TAG=gcr.io/${{ secrets.GKE_PROJECT }}/$F_IMAGE:${GITHUB_REF#refs/heads/}-$GITHUB_SHA" >> $GITHUB_ENV
 
     - name: Create cron image name
-      run: echo "::set-env name=C_IMAGE_WITH_TAG::gcr.io/${{ secrets.GKE_PROJECT }}/$C_IMAGE:${GITHUB_REF#refs/heads/}-$GITHUB_SHA"
+      run: echo "C_IMAGE_WITH_TAG=gcr.io/${{ secrets.GKE_PROJECT }}/$C_IMAGE:${GITHUB_REF#refs/heads/}-$GITHUB_SHA" >> $GITHUB_ENV
 
     - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
       with:
