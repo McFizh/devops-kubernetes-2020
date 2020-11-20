@@ -28,7 +28,7 @@ jobs:
     - name: Create cron image name
       run: echo "C_IMAGE_WITH_TAG=gcr.io/${{ secrets.GKE_PROJECT }}/$C_IMAGE:${GITHUB_REF#refs/heads/}-$GITHUB_SHA" >> $GITHUB_ENV
 
-    - uses: google-github-actions/setup-gcloud@master@master
+    - uses: google-github-actions/setup-gcloud@master
       with:
         service_account_key: ${{ secrets.GKE_SA_KEY }}
         project_id: ${{ secrets.GKE_PROJECT }}
