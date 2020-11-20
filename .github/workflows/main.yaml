@@ -1,0 +1,47 @@
+name: Release application
+
+on:
+  push:
+
+env:
+  GKE_CLUSTER: dwk-cluster
+  GKE_ZONE: europe-north1-a
+  B_IMAGE: dwk-backend
+  F_IMAGE: dwk-frontend
+  C_IMAGE: dwk-cron
+
+jobs:
+  setup-build-publish-deploy:
+    name: Setup, Build, Publish, and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Create backend image name
+      run: echo "::set-env name=B_IMAGE_WITH_TAG::gcr.io/${{ secrets.GKE_PROJECT }}/$B_IMAGE:${GITHUB_REF#refs/heads/}-$GITHUB_SHA"
+
+    - name: Create frontend image name
+      run: echo "::set-env name=F_IMAGE_WITH_TAG::gcr.io/${{ secrets.GKE_PROJECT }}/$F_IMAGE:${GITHUB_REF#refs/heads/}-$GITHUB_SHA"
+
+    - name: Create cron image name
+      run: echo "::set-env name=C_IMAGE_WITH_TAG::gcr.io/${{ secrets.GKE_PROJECT }}/$C_IMAGE:${GITHUB_REF#refs/heads/}-$GITHUB_SHA"
+
+    - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      with:
+        service_account_key: ${{ secrets.GKE_SA_KEY }}
+        project_id: ${{ secrets.GKE_PROJECT }}
+
+    - run: gcloud --quiet auth configure-docker
+
+    - run: gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
+
+    - name: Build
+      run: docker build --tag "$B_IMAGE_WITH_TAG" ./part2/e8_e9/backend
+
+    - name: Build
+      run: docker build --tag "$F_IMAGE_WITH_TAG" ./part2/e8_e9/frontend
+
+    - name: Build
+      run: docker build --tag "$C_IMAGE_WITH_TAG" ./part2/e8_e9/cronjob
