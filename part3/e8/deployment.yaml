@@ -9,7 +9,7 @@ data:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: shared
+  name: app-claim
   namespace: project-ns
 spec:
   accessModes:
@@ -85,6 +85,7 @@ spec:
       containers:
         - name: p3e08-back-cont
           image: mcfizh/dwk-part1:p2e8-backend
+          imagePullPolicy: Always
           resources:
             limits:
               cpu: "50m"

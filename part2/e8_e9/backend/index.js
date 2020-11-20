@@ -29,6 +29,11 @@ const fetchImage = async () => {
   }
 }
 
+// Endpoint for healthcheck
+app.get('/', (req, res) => {
+  res.send('OK');
+});
+
 //
 app.get('/api/todos', async (req, res) => {
   console.log('GET: /api/todos');
