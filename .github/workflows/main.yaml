@@ -70,4 +70,3 @@ jobs:
         ./kustomize edit set image FRONTEND/IMAGE=$F_IMAGE_WITH_TAG
         ./kustomize edit set image CRON/IMAGE=$C_IMAGE_WITH_TAG
         kubectl apply -k .
-        kubectl rollout status deployment $C_IMAGE_WITH_TAG
