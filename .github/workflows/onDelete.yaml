@@ -37,16 +37,19 @@ jobs:
     - name: Set up Kustomize
       run: |-
         cd part3/e3
-        curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
+        curl -sfLo kustomize.tgz https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv3.7.0/kustomize_v3.7.0_linux_amd64.tar.gz
+        tar xf kustomize.tgz
         chmod u+x ./kustomize
 
     - name: Deploy
       run: |-
         cd part3/e3
+        echo "Modifying namespace ${GITHUB_REF#refs/heads/}"
         kubectl config set-context --current --namespace=${GITHUB_REF#refs/heads/}
         ./kustomize edit set namespace ${GITHUB_REF#refs/heads/}
         ./kustomize edit set image BACKEND/IMAGE=$B_IMAGE_WITH_TAG
         ./kustomize edit set image FRONTEND/IMAGE=$F_IMAGE_WITH_TAG
         ./kustomize edit set image CRON/IMAGE=$C_IMAGE_WITH_TAG
+        cat kustomization.yaml
         kubectl delete -k .
         kubectl delete namespace ${GITHUB_REF#refs/heads/} || true
