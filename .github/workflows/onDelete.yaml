@@ -44,10 +44,12 @@ jobs:
     - name: Deploy
       run: |-
         cd part3/e3
+        echo "Modifying namespace ${GITHUB_REF#refs/heads/}"
         kubectl config set-context --current --namespace=${GITHUB_REF#refs/heads/}
         ./kustomize edit set namespace ${GITHUB_REF#refs/heads/}
         ./kustomize edit set image BACKEND/IMAGE=$B_IMAGE_WITH_TAG
         ./kustomize edit set image FRONTEND/IMAGE=$F_IMAGE_WITH_TAG
         ./kustomize edit set image CRON/IMAGE=$C_IMAGE_WITH_TAG
+        cat kustomization.yaml
         kubectl delete -k .
         kubectl delete namespace ${GITHUB_REF#refs/heads/} || true
