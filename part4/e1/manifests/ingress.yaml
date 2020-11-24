@@ -4,7 +4,7 @@ metadata:
   namespace: mainapp-ns
   name: pongapp-service
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: p4e01-pong
   ports:
@@ -18,7 +18,7 @@ metadata:
   namespace: mainapp-ns
   name: mainapp-service
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: p4e01-main
   ports:
@@ -35,11 +35,11 @@ spec:
   rules:
   - http:
       paths:
-      - path: /*
+      - path: /
         backend:
           serviceName: mainapp-service
           servicePort: 2346
-      - path: /pingpong/*
+      - path: /pingpong
         backend:
           serviceName: pongapp-service
           servicePort: 2345
