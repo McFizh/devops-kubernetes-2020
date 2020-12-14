@@ -10,6 +10,7 @@ if(natsHost) {
   console.log('Connecting to NATS: ', natsHost);
   nc = Nats.connect(natsHost);
   nc.on('connect', () => console.log('Connected to NATS'));
+  nc.on('error', (err) => console.log('Failed to connect to NATS: ', err));
 }
 
 // Telegram API
@@ -55,3 +56,6 @@ if(nc) {
     }
   });
 }
+
+// Hack to keep process alive long enough to flush output in case of error
+setInterval(function() {}, 15000);
